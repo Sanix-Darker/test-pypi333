@@ -3,8 +3,7 @@ import setuptools
 
 VERSION = "0.0.1"
 
-with open("README.md", "r") as fh:
-    long_description = fh.read()
+long_description = "blabla bloblo bliblibli"
 
 setuptools.setup(
     name="test-pypi",
