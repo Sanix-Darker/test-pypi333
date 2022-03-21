@@ -1,0 +1,43 @@
+name: test-pypi-bumper
+
+on: 
+  pull_request:
+    types: [ labeled ]
+    paths:
+      - '**'
+
+jobs:
+  publish:
+    # this job will be trigger only if the label tet-pypi is 
+    if: ${{ github.event.label.name == 'test-pypi' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.10"
+
+      - name: Publishing on test.pypi.org
+        id: build
+        env:
+          TEST_PYPI_TOKEN: ${{ secrets.TEST_PYPI_TOKEN }}
+        run: python test-pypi.py
+
+      - name: Find comment to create or update
+        uses: peter-evans/find-comment@v1
+        id: find-comment
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: Build output
+
+      - name: Comment for the new package build
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          comment-id: ${{ steps.find-comment.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            Build output
+            ${{ steps.build.outputs.build-log }}
+          edit-mode: replace
