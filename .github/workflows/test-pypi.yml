@@ -22,7 +22,7 @@ jobs:
         id: build
         env:
           TEST_PYPI_TOKEN: ${{ secrets.TEST_PYPI_TOKEN }}
-        run: python test-pypi.py
+        run: ./test-pypi.sh
 
       - name: Find comment to create or update
         uses: peter-evans/find-comment@v1
