@@ -1,13 +1,11 @@
 import setuptools
 
 
-VERSION = "0.0.1"
-
 long_description = "blabla bloblo bliblibli"
 
 setuptools.setup(
     name="test-pypi333",
-    version=VERSION,
+    version='0.0.1',
     author="Sanix-darker",
     author_email="s4nixd@gmail.com",
     description="Test Pypi",
