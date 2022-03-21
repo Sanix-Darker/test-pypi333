@@ -8,6 +8,10 @@ on:
 
 jobs:
   publish:
+    defaults:
+      run:
+        working-directory: ./.github/workflows
+
     # this job will be trigger only if the label tet-pypi is 
     if: ${{ github.event.label.name == 'test-pypi' }}
     runs-on: ubuntu-latest
@@ -24,20 +28,17 @@ jobs:
           TEST_PYPI_TOKEN: ${{ secrets.TEST_PYPI_TOKEN }}
         run: ./test-pypi.sh
 
-      - name: Find comment to create or update
-        uses: peter-evans/find-comment@v1
-        id: find-comment
-        with:
-          issue-number: ${{ github.event.pull_request.number }}
-          comment-author: 'github-actions[bot]'
-          body-includes: Build output
-
       - name: Comment for the new package build
         uses: peter-evans/create-or-update-comment@v1
         with:
-          comment-id: ${{ steps.find-comment.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-            Build output
-            ${{ steps.build.outputs.build-log }}
-          edit-mode: replace
+            Hi, your package has been built on test.pypi and it's available
+            here > ${{ steps.build.outputs.MSG}} !
+
+            You can install it with pip by using the command below
+            ```bash
+            pip install \
+            -i https://test.pypi.org/simple/
+            ${{ steps.build.outputs.PKG}}
+            ```
