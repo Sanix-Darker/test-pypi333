@@ -7,8 +7,8 @@ pip install -U pip
 
 # assuming we identify a poetry project with the pyproject.toml
 # at the root and setup.py as the default
-TOM_FILE=pyproject.toml
-SETUP_FILE=setup.py
+TOM_FILE="$GITHUB_REPOSITORY/pyproject.toml"
+SETUP_FILE="$GITHUB_REPOSITORY/setup.py"
 
 if [ -f "$TOM_FILE" ]; then
 
