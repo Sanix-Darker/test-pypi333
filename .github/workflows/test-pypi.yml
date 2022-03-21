@@ -37,11 +37,13 @@ jobs:
           body-includes: Build output
 
       - name: Comment for the new package build
+        env:
+          PUSH_LOG_BODY: $(cat $GITHUB_WORKSPACE/publish-output.log) 
         uses: peter-evans/create-or-update-comment@v1
         with:
           comment-id: ${{ steps.find-comment.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
           body: |
             Build output
-            ${{ $(cat $GITHUB_WORKSPACE/publish-output.log) }}
+            ${{ PUSH_LOG_BODY }}
           edit-mode: replace
