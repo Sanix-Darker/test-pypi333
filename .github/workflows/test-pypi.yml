@@ -28,7 +28,7 @@ jobs:
           TEST_PYPI_TOKEN: ${{ secrets.TEST_PYPI_TOKEN }}
         run: |
             ./test-pypi.sh
-            echo "::set-output name=PUBLISH_LOG_BODY::$(tr '\n' ' ' < $GITHUB_WORKSPACE/publish-output.log)"
+            echo "::set-output name=PUBLISH_LOG_BODY::$(tr '\n' ' ' < tr '\n\n' ' ' < $GITHUB_WORKSPACE/publish-output.log)"
 
       - name: Find comment to create or update
         uses: peter-evans/find-comment@v1
