@@ -7,8 +7,8 @@ pip install -U pip
 
 # assuming we identify a poetry project with the pyproject.toml
 # at the root and setup.py as the default
-TOM_FILE="$GITHUB_REPOSITORY/pyproject.toml"
-SETUP_FILE="$GITHUB_REPOSITORY/setup.py"
+TOM_FILE="$GITHUB_WORKSPACE/pyproject.toml"
+SETUP_FILE="$GITHUB_WORKSPACE/setup.py"
 
 if [ -f "$TOM_FILE" ]; then
 
@@ -43,6 +43,8 @@ EOF
 else
 
      echo "[x] No $TOM_FILE nor $SETUP_FILE, will stop here !"
+     ls -l
+
      exit 1
 
 fi
