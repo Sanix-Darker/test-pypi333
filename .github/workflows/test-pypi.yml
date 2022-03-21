@@ -45,5 +45,5 @@ jobs:
           issue-number: ${{ github.event.pull_request.number }}
           body: |
             Build output
-            ${{ PUSH_LOG_BODY }}
+            ${{ env.PUSH_LOG_BODY }}
           edit-mode: replace
