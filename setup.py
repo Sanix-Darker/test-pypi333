@@ -6,7 +6,7 @@ VERSION = "0.0.1"
 long_description = "blabla bloblo bliblibli"
 
 setuptools.setup(
-    name="test-pypi",
+    name="test-pypi333",
     version=VERSION,
     author="Sanix-darker",
     author_email="s4nixd@gmail.com",

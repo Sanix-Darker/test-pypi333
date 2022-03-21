@@ -30,15 +30,20 @@ elif [ -f "$SETUP_FILE" ]; then
      pip install wheel twine
      python $SETUP_FILE sdist bdist_wheel
      # we create our credential file for username, password and repository url
-     cat <<EOF > $HOME/.pypirc
+     cat <<EOF > ~/.pypirc
+[distutils]
+index-servers =
+  testpypi
+
 [testpypi]
 username = __token__
 password = $TEST_PYPI_TOKEN
 repository = https://test.pypi.org/legacy/
 
 EOF
+     cat ~/.pypirc
      # the upload process
-     twine upload dist/*
+     twine upload -r testpypi dist/*
 
 else
 
