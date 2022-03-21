@@ -9,7 +9,7 @@ pip install -U pip
 # at the root and setup.py as the default
 TOM_FILE="$GITHUB_WORKSPACE/pyproject.toml"
 SETUP_FILE="$GITHUB_WORKSPACE/setup.py"
-LOG_FILE="$GITHUB_WORKSPACE/publish-output.log"
+TMP_VERSION=$(date +%s)
 
 if [ -f "$TOM_FILE" ]; then
 
@@ -20,11 +20,11 @@ if [ -f "$TOM_FILE" ]; then
      # configuration of the repository-url where the build will be pushed
      poetry config repositories.test-pypi https://test.pypi.org/legacy/
      poetry config pypi-token.pypi $TEST_PYPI_TOKEN
-     # to update the version to an alpha one
-     poetry version prerelease
+
+     sed -i 's/^.*version =.*$/version = '$TMP_VERSION',/' $TOM_FILE
 
      # We publish
-     poetry publish --build > $LOG_FILE
+     poetry publish --build
 
 elif [ -f "$SETUP_FILE" ]; then
 
@@ -32,11 +32,7 @@ elif [ -f "$SETUP_FILE" ]; then
 
      pip install wheel twine
 
-     # we generate a random version that will be pushed
-     # VERSION=$(echo $RANDOM | md5sum | head -c 7;)
-     # or the simple timestamp to be sure the next version
-     # will be an int upper than the previous one
-     sed -i 's/^.*version=.*$/version='$(date +%s)',/' $SETUP_FILE
+     sed -i 's/^.*version=.*$/version='$TMP_VERSION',/' $SETUP_FILE
 
      python $SETUP_FILE sdist bdist_wheel
      # we create our credential file for username, password and repository url
@@ -52,15 +48,15 @@ repository = https://test.pypi.org/legacy/
 
 EOF
      # the upload process
-     twine upload -r testpypi dist/* > $LOG_FILE
+     twine upload -r testpypi dist/*
 
 else
 
      echo "[x] No $TOM_FILE nor $SETUP_FILE, will stop here !"
-     ls -l
-
      exit 1
 
 fi
 
+REPOSITORY_NAME=$(echo "$GITHUB_REPOSITORY" | awk -F / '{print $2}')
+echo "::set-output name=MSG::$(echo "https://test.pypi.org/project/$REPOSITORY_NAME/$TMP_VERSION/")\n"
 

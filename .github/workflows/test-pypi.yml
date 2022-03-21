@@ -26,24 +26,20 @@ jobs:
         id: build
         env:
           TEST_PYPI_TOKEN: ${{ secrets.TEST_PYPI_TOKEN }}
-        run: |
-            ./test-pypi.sh
-            echo "::set-output name=PUBLISH_LOG_BODY::$(tr '\n' ' ' < tr '\n\n' ' ' < $GITHUB_WORKSPACE/publish-output.log)"
-
-      - name: Find comment to create or update
-        uses: peter-evans/find-comment@v1
-        id: find-comment
-        with:
-          issue-number: ${{ github.event.pull_request.number }}
-          comment-author: 'github-actions[bot]'
-          body-includes: Build output
+        run: ./test-pypi.sh
 
       - name: Comment for the new package build
         uses: peter-evans/create-or-update-comment@v1
         with:
-          comment-id: ${{ steps.find-comment.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-            Build output
-            ${{ steps.build.outputs.PUBLISH_LOG_BODY }}
-          edit-mode: replace
+            Hi, your package has been built on test.pypi and it's available
+            here > ${{ steps.build.outputs.MSG}} !
+
+            You can install it with pip by using the command below
+            ```bash
+            pip install \
+            --index-url https://test.pypi.org/simple/ \
+            --extra-index-url https://pypi.org/simple \
+            <package-name>
+            ```
