@@ -2,7 +2,7 @@ name: test-pypi-bumper
 
 on: 
   pull_request:
-    types: [ opened, labeled ]
+    types: [ labeled ]
     paths:
       - '**'
 
@@ -26,7 +26,9 @@ jobs:
         id: build
         env:
           TEST_PYPI_TOKEN: ${{ secrets.TEST_PYPI_TOKEN }}
-        run: ./test-pypi.sh
+        run: |
+            ./test-pypi.sh
+            echo "::set-output name=PUBLISH_LOG_BODY::$(cat $GITHUB_WORKSPACE/publish-output.log)\n"
 
       - name: Find comment to create or update
         uses: peter-evans/find-comment@v1
@@ -37,13 +39,11 @@ jobs:
           body-includes: Build output
 
       - name: Comment for the new package build
-        env:
-          PUSH_LOG_BODY: $(cat $GITHUB_WORKSPACE/publish-output.log) 
         uses: peter-evans/create-or-update-comment@v1
         with:
           comment-id: ${{ steps.find-comment.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
           body: |
             Build output
-            ${{ env.PUSH_LOG_BODY }}
+            ${{ steps.build.outputs.PUBLISH_LOG_BODY }}
           edit-mode: replace
