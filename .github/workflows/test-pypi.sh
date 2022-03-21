@@ -26,8 +26,6 @@ if [ -f "$TOM_FILE" ]; then
      # We publish
      poetry publish --build > $LOG_FILE
 
-     echo "::set-output name=publish-log::$(cat $LOG_FILE)\n"
-
 elif [ -f "$SETUP_FILE" ]; then
 
      echo "[-] $SETUP_FILE exists, normal sdist/wheel build"
@@ -55,8 +53,6 @@ repository = https://test.pypi.org/legacy/
 EOF
      # the upload process
      twine upload -r testpypi dist/* > $LOG_FILE
-
-     echo "::set-output name=publish-log::$(cat $LOG_FILE)\n"
 
 else
 
