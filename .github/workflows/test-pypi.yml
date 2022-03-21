@@ -2,7 +2,7 @@ name: test-pypi-bumper
 
 on: 
   pull_request:
-    types: [ edited, labeled ]
+    types: [ opened, labeled ]
     paths:
       - '**'
 
