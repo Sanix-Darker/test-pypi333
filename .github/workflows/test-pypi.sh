@@ -28,7 +28,7 @@ elif [ -f "$SETUP_FILE" ]; then
      echo "[-] $SETUP_FILE exists, normal sdist/wheel build"
 
      pip install wheel twine
-     python setup.py sdist bdist_wheel
+     python $SETUP_FILE sdist bdist_wheel
      # we create our credential file for username, password and repository url
      cat <<EOF > $HOME/.pypirc
 [testpypi]
