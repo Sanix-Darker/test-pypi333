@@ -39,7 +39,6 @@ jobs:
             You can install it with pip by using the command below
             ```bash
             pip install \
-            --index-url https://test.pypi.org/simple/ \
-            --extra-index-url https://pypi.org/simple \
+            -i https://test.pypi.org/simple/
             ${{ steps.build.outputs.PKG}}
             ```
