@@ -58,5 +58,6 @@ else
 fi
 
 REPOSITORY_NAME=$(echo "$GITHUB_REPOSITORY" | awk -F / '{print $2}')
-echo "::set-output name=MSG::$(echo "https://test.pypi.org/project/$REPOSITORY_NAME/$TMP_VERSION/")\n"
+echo "::set-output name=PKG::$(echo "$REPOSITORY_NAME==$TMP_VERSION")"
+echo "::set-output name=MSG::$(echo "https://test.pypi.org/project/$REPOSITORY_NAME/$TMP_VERSION/")"
 
