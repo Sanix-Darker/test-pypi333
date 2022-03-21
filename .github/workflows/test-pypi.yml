@@ -2,12 +2,16 @@ name: test-pypi-bumper
 
 on: 
   pull_request:
-    types: [ labeled ]
+    types: [ edited, labeled ]
     paths:
       - '**'
 
 jobs:
   publish:
+    defaults:
+      run:
+        working-directory: ./.github/workflows
+
     # this job will be trigger only if the label tet-pypi is 
     if: ${{ github.event.label.name == 'test-pypi' }}
     runs-on: ubuntu-latest
